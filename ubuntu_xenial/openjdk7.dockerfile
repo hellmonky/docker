@@ -10,10 +10,10 @@ RUN apt-get update && \
     libxrender-dev xorg-dev xutils-dev binutils libmotif-dev ant
 
 # 安装openjdk7作为bootstrap编译器
-RUN apt-get install software-properties-common python-software-properties && \
-    add-apt-repository ppa:openjdk-r/ppa && \
+RUN apt-get install -y software-properties-common python-software-properties && \
+    add-apt-repository -y ppa:openjdk-r/ppa && \
     apt-get update && \
-    apt-get install openjdk-7-jdk
+    apt-get install -y openjdk-7-jdk
 
 # 设置JAVA变量：
 
