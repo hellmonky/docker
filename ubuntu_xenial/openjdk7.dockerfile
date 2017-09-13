@@ -1,4 +1,3 @@
-# 源：
 FROM ubuntu
 
 # 安装必要的工具
@@ -14,8 +13,3 @@ RUN apt-get install -y software-properties-common python-software-properties && 
     add-apt-repository -y ppa:openjdk-r/ppa && \
     apt-get update && \
     apt-get install -y openjdk-7-jdk
-
-# 设置JAVA变量：
-
-# 设置环境变量：
-
