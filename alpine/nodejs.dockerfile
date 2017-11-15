@@ -1,6 +1,7 @@
-FROM alpine:3.6
+FROM alpine:3.6.2
 
 ENV NODE_VERSION 8.9.1
+ENV NODE_PATH /usr/local/lib/node_modules
 
 RUN addgroup -g 1000 node \
     && adduser -u 1000 -G node -s /bin/sh -D node \
@@ -15,9 +16,9 @@ RUN addgroup -g 1000 node \
         libgcc \
         linux-headers \
         make \
-        python \
+        python
   # gpg keys listed at https://github.com/nodejs/node#release-team
-  && for key in \
+RUN for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
     FD3A5288F042B6850C66B31F09FE44734EB7990E \
     71DCFD284A79C3B38668286BC97EC7A07EDE3FC1 \

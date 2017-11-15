@@ -1,0 +1,1 @@
+docker build -f alpine.dockerfile -t alpine:3.6.2 .
