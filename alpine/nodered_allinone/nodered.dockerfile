@@ -15,6 +15,7 @@ RUN addgroup -g 1000 node \
         binutils-gold \
         curl \
         wget \
+        build-base \
         g++ \
         gcc \
         gnupg \
@@ -22,7 +23,11 @@ RUN addgroup -g 1000 node \
         linux-headers \
         make \
         python \
-        openssl
+        python2-dev \
+        py-pip \
+        openssl \
+        bash \
+        nano
 
 # gpg keys listed at https://github.com/nodejs/node#release-team
 RUN for key in \
@@ -80,7 +85,5 @@ USER root
 
 RUN npm -g config set user root
 RUN npm config set registry https://registry.npm.taobao.org
-RUN npm install -g grunt grunt-cli bcrypt bcryptjs nopt fs-extra when clone semver i18next jsonata body-parser passport cors mustache oauth2orize passport-http-bearer passport-oauth2-client-password ws hapi
+RUN npm install -g grunt grunt-cli bcrypt bcryptjs nopt fs-extra when clone semver i18next jsonata body-parser passport cors mustache oauth2orize passport-http-bearer passport-oauth2-client-password ws
 RUN npm install -g node-red
-
-ENTRYPOINT ["/usr/local/bin/node-red --settings"]
