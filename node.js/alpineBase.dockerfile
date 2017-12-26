@@ -1,19 +1,28 @@
+# docker image with alpineLinux 3.7 and node.js 8.9.3
+# author: yuanlai.xwt@alibaba-inc.com
 FROM scratch
 
-# baseImage build and set
+# baseImage build and setup environment
 ADD alpine-minirootfs-3.7.0-x86_64.tar.gz /
 RUN rm -f /etc/apk/repositories && \
     echo "http://mirrors.ustc.edu.cn/alpine/v3.7/main/" >> /etc/apk/repositories && \
     echo "http://mirrors.ustc.edu.cn/alpine/v3.7/community" >> /etc/apk/repositories
-RUN apk update --update && \
+RUN apk upgrade && apk upgrade && \
     apk add bash tree tzdata && \
+    apk add ca-certificates && \
+	update-ca-certificates && \
+	apk add openssl python python-dev make gcc g++ && \
+    apk add binutils-gold curl gnupg libgcc linux-headers &&\
+    apk add --no-cache libstdc++ && \
+    apk add --no-cache --virtual .build-deps && \
     ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime && \
-    echo "Asia/Shanghai" > /etc/timezone
-    
+    echo "Asia/Shanghai" > /etc/timezone && \
+    rm -rf /tmp/* /var/cache/apk/*
+
+
 # 安装glibc支持
 COPY *.apk /tmp/
-RUN apk upgrade --update && \
-    apk add --allow-untrusted /tmp/*.apk && \
+RUN apk add --allow-untrusted /tmp/*.apk && \
     rm -v /tmp/*.apk && \
     ( /usr/glibc-compat/bin/localedef --force --inputfile POSIX --charmap UTF-8 C.UTF-8 || true ) && \
     echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
@@ -21,26 +30,14 @@ RUN apk upgrade --update && \
     rm -rf /tmp/* /var/cache/apk/* && \
     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf
 
+
 # 安装nodejs环境支持
 ENV NODE_VERSION 8.9.3
 ENV YARN_VERSION 1.3.2
 ENV NODE_PATH /usr/local/lib/node_modules
 RUN addgroup -g 1000 node \
-    && adduser -u 1000 -G node -s /bin/sh -D node \
-    && apk add --no-cache \
-        libstdc++ \
-    && apk add --no-cache --virtual .build-deps \
-        binutils-gold \
-        curl \
-        g++ \
-        gcc \
-        gnupg \
-        libgcc \
-        linux-headers \
-        make \
-        python \
-        python-dev
-  # gpg keys listed at https://github.com/nodejs/node#release-team
+    && adduser -u 1000 -G node -s /bin/sh -D node
+# gpg keys listed at https://github.com/nodejs/node#release-team
 RUN for key in \
     94AE36675C464D64BAFA68DD7434390BDBE9B9C5 \
     FD3A5288F042B6850C66B31F09FE44734EB7990E \
@@ -86,5 +83,12 @@ RUN apk add --no-cache --virtual .build-deps-yarn curl gnupg tar \
   && rm yarn-v$YARN_VERSION.tar.gz.asc yarn-v$YARN_VERSION.tar.gz \
   && apk del .build-deps-yarn
 
-# testify
-CMD ["/bin/sh"]
+
+# 切换为node用户，设置使用国内源
+USER node
+RUN npm -g config set user root && \
+    npm -g config set registry https://registry.npm.taobao.org
+
+
+# startup
+CMD ["node"]
