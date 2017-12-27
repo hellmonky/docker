@@ -53,10 +53,10 @@ RUN mkdir -p /opt/yarn \
     && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
     && rm yarn-v1.3.2.tar.gz
 
-# 切换为node用户，设置使用国内源
-USER node
+# 设置node.js使用国内源
 RUN npm -g config set user root && \
-    npm -g config set registry https://registry.npm.taobao.org
+    npm -g config set registry https://registry.npm.taobao.org && \
+    npm install -g grunt grunt-cli
 
 
 # startup
