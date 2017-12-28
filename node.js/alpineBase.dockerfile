@@ -1,5 +1,7 @@
-# docker image with alpineLinux 3.7 and node.js 8.9.3
-# author: yuanlai.xwt@alibaba-inc.com
+# info:         docker image with alpineLinux 3.7 and node.js 8.9.3
+# author:       yuanlai.xwt@alibaba-inc.com
+# updateTime:   2017-12-28
+
 FROM scratch
 
 # baseImage build and setup environment
@@ -53,10 +55,12 @@ RUN mkdir -p /opt/yarn \
     && ln -s /opt/yarn/bin/yarn /usr/local/bin/yarnpkg \
     && rm yarn-v1.3.2.tar.gz
 
-# 设置node.js使用国内源
+
+# 设置使用国内源
 RUN npm -g config set user root && \
     npm -g config set registry https://registry.npm.taobao.org && \
-    npm install -g grunt grunt-cli
+    npm install -g grunt grunt-cli && \
+    yarn config set registry 'https://registry.npm.taobao.org'
 
 
 # startup
