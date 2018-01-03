@@ -1,5 +1,5 @@
 # info:         docker image with:
-# 					alpineLinux 3.7
+# 					alpineLinux 3.7 (glibc 2.26)
 # 					node.js 8.9.3 (yarn 1.3.2)
 # 					python 2.7.14 (pip installed pakcage)
 # 					jdk 1.8.52
@@ -67,9 +67,9 @@ RUN npm -g config set user root && \
     yarn config set registry 'https://registry.npm.taobao.org'
 
 
-# 安装alijdk：
-ADD ajdk-8.4.7-b187.tgz /opt/
-ENV JAVA_HOME /opt/ajdk-8.4.7-b187
+# 安装jdk：
+ADD jdk-8u152.tgz /opt/
+ENV JAVA_HOME /opt/jdk-8u152
 ENV PATH $JAVA_HOME/bin:$PATH
 ENV CLASSPATH .:$JAVA_HOME/lib/dt.jar:$JAVA_HOME/lib/tools.jar
 
