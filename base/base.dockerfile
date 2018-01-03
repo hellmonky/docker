@@ -47,4 +47,4 @@ COPY sshd_config /etc/ssh/
 
 
 # startup
-CMD ["/usr/sbin/sshd"]
+CMD ["/bin/bash"]
